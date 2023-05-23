@@ -6,8 +6,6 @@ const SECRET = process.env.SECRET;
 module.exports = (sequelize, DataTypes) => {
   //!! this user variable is used below for authentication middleware
   const user = sequelize.define('users', {
-    // the big diff:  notice there is no return
-    // use SAME property names always
     username: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -41,9 +39,9 @@ module.exports = (sequelize, DataTypes) => {
       // this gives us the object stored in our token. reference the first parameter in jwt.sign above.
       let payload = jwt.verify(token, SECRET);
       console.log('payload: ', payload);
-      const user = await user.findOne({where: {username: payload.username}});
-      if(user){
-        return user;
+      const selectedUser = await user.findOne({where: {username: payload.username}});
+      if(selectedUser){
+        return selectedUser;
       }
       
     } catch (error) {
