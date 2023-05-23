@@ -1,32 +1,31 @@
 'use strict';
 
+// 3rd Party Resources
 const express = require('express');
-const authRouter = require('./auth/router');
-const notFound = require('./middleware/404');
+const cors = require('cors');
+const morgan = require('morgan');
+
+// Esoteric Resources
 const errorHandler = require('./middleware/500');
-const {userModel }= require('./auth/models/index');
-const bearer = require('./auth/middleware/bearer');
+const notFound = require('./middleware/404');
+const authRoutes = require('./auth/router/index.js');
 
+// Prepare the express app
 const app = express();
+
+// App Level MW
+app.use(cors());
+app.use(morgan('dev'));
+
 app.use(express.json());
-app.use(authRouter);
+app.use(express.urlencoded({ extended: true }));
 
-// allows us to accept webform data.  aka process FORM input and add to request body
-// NOT NECESSARY FOR TODAY, BUT GOOD QUALITY OF LIFE TO KNOW ABOUT FOR LATER
-app.use(express.urlencoded({extended: true}));
+// Routes
+app.use(authRoutes);
 
-app.get('/', (req, res, next) => {
-  res.status(200).send('proof of life');
-});
-
-app.get('/users', bearer, async (req, res, next) => {
-  const users = await userModel.findAll();
-
-  res.status(200).send(users);
-});
-
-app.use('*', notFound);
-app.use(errorHandler);
+// Catchalls
+app.use(notFound); // 404
+app.use(errorHandler); // 500
 
 
 const start = (port) => {

@@ -1,17 +1,23 @@
 'use strict';
 
-// 3rd party requirements
+require('dotenv').config();
 const { Sequelize, DataTypes } = require('sequelize');
-const user = require('./user');
+const userSchema = require('./user');
 
+const DATABASE_URL = process.env.NODE_ENV === 'test' ? 'sqlite::memory' : process.env.DATABASE_URL;
 
-// setup database url
-const DATABASE_URL = process.env.NODE_ENV === 'test' ? 'sqlite::memory:' : process.env.DATABASE_URL;
+const DATABASE_CONFIG = process.env.NODE_ENV === 'production' ? {
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+  },
+} : {};
 
-// db singleton
-const sequelize = new Sequelize(DATABASE_URL);
+const sequelize = new Sequelize(DATABASE_URL, DATABASE_CONFIG);
 
-// create model using the schema
-const userModel = user(sequelize, DataTypes);
-
-module.exports = { sequelize, userModel };
+module.exports = {
+  db: sequelize,
+  users: userSchema(sequelize, DataTypes),
+};
