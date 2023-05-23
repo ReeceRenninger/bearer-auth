@@ -2,6 +2,7 @@
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken'); // add this require to remedy jwt linter errors
+const SECRET = process.env.SECRET;
 
 const userSchema = (sequelize, DataTypes) => {
   const model = sequelize.define('User', {
@@ -10,7 +11,7 @@ const userSchema = (sequelize, DataTypes) => {
     token: {
       type: DataTypes.VIRTUAL,
       get() {
-        return jwt.sign({ username: this.username });
+        return jwt.sign({ username: this.username }, SECRET, {expiresIn: 1000 * 60 * 60 * 24 * 7});
       },
     },
   });
@@ -31,7 +32,7 @@ const userSchema = (sequelize, DataTypes) => {
   // Bearer AUTH: Validating a token
   model.authenticateToken = async function (token) {
     try {
-      const parsedToken = jwt.verify(token, process.env.SECRET);
+      const parsedToken = jwt.verify(token, SECRET);
       const user = this.findOne({ username: parsedToken.username });
       if (user) { return user; }
       throw new Error('User Not Found');
@@ -39,7 +40,7 @@ const userSchema = (sequelize, DataTypes) => {
       throw new Error(e.message);
     }
   };
-
+  console.log(model);
   return model;
 };
 
