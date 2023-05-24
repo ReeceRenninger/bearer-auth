@@ -14,7 +14,7 @@ module.exports = async (req, res, next) => {
 
     req.user = validUser;
     req.token = validUser.token;
-    
+    next(); // added this due to hanging in thunderclient
     if(!validUser){
       throw new Error('Invalid Login!');
     }
