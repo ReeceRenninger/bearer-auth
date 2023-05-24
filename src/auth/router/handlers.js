@@ -3,7 +3,6 @@
 const { users } = require('../models/index.js');
 
 async function handleSignup(req, res, next) {
-  console.log('SECRET: ', process.env.SECRET);
   
   try {
     let userRecord = await users.create(req.body);
