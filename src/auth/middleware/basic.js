@@ -7,7 +7,7 @@ module.exports = async (req, res, next) => {
   //autherror was here, changed to next with error message 
   try {
     if (!req.headers.authorization) {
-      { res.status(403).send('NOT AUTHORIZED'); }
+      { res.status(403).send('NOT AUTHORIZED'); } 
     }
 
     let basic = req.headers.authorization;
