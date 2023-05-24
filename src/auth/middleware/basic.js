@@ -5,14 +5,14 @@ const { user } = require('../models/index.js');
 
 module.exports = async (req, res, next) => {
   //autherror was here, changed to next with error message 
-  if (!req.headers.authorization) {
-    next('Not authorized, no token present!');
-  } 
-
-  let basic = req.headers.authorization;
-  let [username, pass] = base64.decode(basic).split(':');
-
   try {
+    if (!req.headers.authorization) {
+      { res.status(403).send('NOT AUTHORIZED'); }
+    }
+
+    let basic = req.headers.authorization;
+    let basicString = basic.split(' ').pop();
+    let [username, pass] = base64.decode(basicString).split(':');
     req.user = await user.authenticateBasic(username, pass);
     next();
   } catch (e) {
