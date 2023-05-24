@@ -3,11 +3,10 @@
 const { users } = require('../models/index.js');
 
 async function handleSignup(req, res, next) {
-  console.log('SECRET: ', process.env.SECRET);
   
   try {
     let userRecord = await users.create(req.body);
-    console.log('this is the req.body for signup', req.body);
+
     const output = {
       user: userRecord,
       token: userRecord.token,
