@@ -10,6 +10,7 @@ Build off our existing auth-server ability to create an account and handle basic
 
 Links and Resources
 
+  [PR for Lab Original Submission](https://github.com/ReeceRenninger/bearer-auth/pull/1)
   [GitHub Actions ci/cd](https://github.com/ReeceRenninger/bearer-auth)
   back-end server url (when applicable)
   
