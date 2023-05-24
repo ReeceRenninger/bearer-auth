@@ -1,6 +1,6 @@
 'use strict';
 
-const jwt = require ('jsonwebtoken');
+// const jwt = require ('jsonwebtoken');
 const { users } = require('../models/index.js');
 
 module.exports = async (req, res, next) => {
@@ -10,16 +10,18 @@ module.exports = async (req, res, next) => {
     if (!req.headers.authorization) { next('Invalid Login'); }
 
     const token = req.headers.authorization.split(' ').pop();
-    const decodedToken = jwt.verify(token, process.env.SECRET);
 
-    const userName = decodedToken.username;
+    // const decodedToken = jwt.verify(token, process.env.SECRET);
+    // const userName = decodedToken.username;
+
     const validUser = await users.authenticateWithToken(token); // use findOne where property with username value
 
+    req.user = validUser;
+    req.token = validUser.token;
+    
     if(!validUser){
       throw new Error('Invalid Login!');
     }
-    req.user = validUser;
-    req.token = validUser.token;
 
   } catch (e) {
     console.error(e);
