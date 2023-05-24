@@ -26,13 +26,17 @@ Setup
 
 How to initialize/run your application (where applicable)
 
-    e.g. npm start
+    To start we need to init:config and then do a db:create to get your SQL DB created.  Once that is working you can run nodemon to get your server connected to your selected PORT from your env file.  From here you should be able to execute the routes on thunderclient to POST or GET depending on the route you have selected.
 
 How to use your library (where applicable)
 Features / Routes
 
     Feature One: Details of feature
-    GET : /hello - specific route to hit
+    GET : /users - grab all users from DB
+    POST : /signup - generate a new user
+    POST : /signin - signin in as an EXISTING user
+    
+
 
 Tests
 
