@@ -7,11 +7,12 @@ async function handleSignup(req, res, next) {
   
   try {
     let userRecord = await users.create(req.body);
+    console.log('this is the req.body for signup', req.body);
     const output = {
       user: userRecord,
       token: userRecord.token,
     };
-    res.status(200).json(output);
+    res.status(201).json(output); // updated res.status to 201 to match expected for test
   } catch (e) {
     console.error(e);
     next(e);
