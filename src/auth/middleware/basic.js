@@ -1,19 +1,17 @@
 'use strict';
 
 const base64 = require('base-64');
-const { users } = require('../models/index.js'); //updated to users
+const { users } = require('../models/index.js');
 
 module.exports = async (req, res, next) => {
-  //autherror was here, changed to next with error message 
-  if (!req.headers.authorization) {
-    next('No auth headers are present!');
-  }
+
+  if (!req.headers.authorization) { next('no auth headers present'); }
 
   let basic = req.headers.authorization.split(' ').pop();
   let [username, password] = base64.decode(basic).split(':');
 
   try {
-    req.user = await users.authenticateBasic(username, password); //updated to users
+    req.user = await users.authenticateBasic(username, password);
     next();
   } catch (e) {
     console.error(e);
