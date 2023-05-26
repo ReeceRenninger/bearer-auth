@@ -10,15 +10,11 @@ module.exports = async (req, res, next) => {
     if (!req.headers.authorization) { next('Invalid Login'); }
 
     const token = req.headers.authorization.split(' ').pop();
-
-    // const decodedToken = jwt.verify(token, process.env.SECRET);
-    // const userName = decodedToken.username;
-
-    const validUser = await users.authenticateWithToken(token); // use findOne where property with username value
+    const validUser = await users.authenticateToken(token); // use findOne where property with username value
 
     req.user = validUser;
     req.token = validUser.token;
-    
+    next(); // added this due to hanging in thunderclient
     if(!validUser){
       throw new Error('Invalid Login!');
     }
